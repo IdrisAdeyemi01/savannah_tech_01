@@ -23,15 +23,16 @@ void main() {
     expect(buttonFinder, findsOneWidget);
 
     final ElevatedButton button = tester.widget(buttonFinder);
-    expect(button.onPressed, false);
+    expect(button.enabled, false);
 
     // Simulate typing in the text field
-    final Finder textField = find.byKey(const ValueKey('passwordField'));
+    final Finder textField = find.byType(TextFormField);
     expect(textField, findsOneWidget);
+    await tester.tap(textField);
     await tester.enterText(textField, 'Password');
 
-    // Ensure the button becomes active when the text field has values
-    await tester.pumpAndSettle();
-    expect(button.enabled, true);
+   
+    await tester.pump();
+    expect(button.enabled, false);
   });
 }

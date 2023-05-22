@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 obscureText: true,
                 validator: (value) {
-                  if (_passwordController.text.isNotEmpty) {
+                  if (value!.isNotEmpty) {
                     return null;
                   } else {
                     return 'You have not typed a password';
@@ -54,19 +54,25 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 20,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text('Login Successful'),
-                      ),
-                    );
-                  }
-                
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _passwordController,
+                builder: (context, value, child) {
+                  return ElevatedButton(
+                    onPressed: value.text.isNotEmpty
+                        ? () {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text('Login Successful'),
+                                ),
+                              );
+                            }
+                          }
+                        : null,
+                    child: const Text('Login'),
+                  );
                 },
-                child: const Text('Login'),
               ),
             ],
           ),
